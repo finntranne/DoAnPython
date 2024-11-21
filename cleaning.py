@@ -16,11 +16,17 @@ def chuanHoaDuLieuPhanLoai(data, categorical_columns):
         data[col] = data[col].str.lower()
     return data
 
-def clean_data(data):
+def thayDauGachDuoiThanhKhoangTrang(data):
+    """Thay doi dau gach duoi thanh khoang trang"""
+    data = data.applymap(lambda x: x.replace('_', ' ') if isinstance(x, str) else x)
+    return data
+
+def cleanData(data):
     """Chay tat ca cac ham lam sach tren tap du lieu."""
     data = lapDayORong(data)
     categorical_columns = ['union', 'ethn', 'maried', 'health', 'industry', 'occupation', 'residence']
     data = chuanHoaDuLieuPhanLoai(data, categorical_columns)
+    data = thayDauGachDuoiThanhKhoangTrang(data)
     return data
 
 def loadAndCleanCSV(filePath, outPath, cols = 13):
@@ -41,6 +47,6 @@ def loadAndCleanCSV(filePath, outPath, cols = 13):
                 all_rows.append(split_row)
     df_all = pd.DataFrame(all_rows, columns=["rownames", "nr", "year", "school", "exper", "union", "ethn", 
                                             "maried", "health", "wage", "industry", "occupation", "residence"])
-    df_all = clean_data(df_all)
+    df_all = cleanData(df_all)
     df_all.to_csv(outPath, index=False, header=False)
     return df_all
