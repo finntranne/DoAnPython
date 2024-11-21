@@ -5,10 +5,18 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from package.chart import *
+from package.CRUD import *
 
 # Đọc dữ liệu từ file CSV
 file_path = 'NewMales.csv'
-df = pd.read_csv(file_path)
+try:
+    df = pd.read_csv(file_path)
+except FileNotFoundError:
+    print(f"File '{file_path}' not found.")
+    df = pd.DataFrame()  # Tạo DataFrame trống
+except pd.errors.EmptyDataError:
+    print(f"File '{file_path}' is empty or corrupted.")
+    df = pd.DataFrame()  # Tạo DataFrame trống
 
 class DataApp:
     def __init__(self, root):
@@ -17,6 +25,7 @@ class DataApp:
         self.root.geometry("1000x600")
         self.root.state("zoomed")
         
+        # Khung trái chứa các nút chức năng
         self.left_frame = tk.Frame(root, width=200, bg="#FEAFA1")
         self.left_frame.pack(side="left", fill="y")
         self.right_frame = tk.Frame(root)
@@ -24,16 +33,16 @@ class DataApp:
 
         tk.Label(self.left_frame, text="Chức năng", font=("Arial", 20, "bold"), bg="#FEAFA1").pack(pady=10)
 
-        self.create_button = tk.Button(self.left_frame, text="Create", command=self.create_data)
+        self.create_button = tk.Button(self.left_frame, text="Create", command=self.CREATE)
         self.create_button.pack(fill="x", padx=10, pady=5)
 
-        self.read_button = tk.Button(self.left_frame, text="Read", command=self.read_data)
+        self.read_button = tk.Button(self.left_frame, text="Read", command=self.READ)
         self.read_button.pack(fill="x", padx=10, pady=5)
 
-        self.update_button = tk.Button(self.left_frame, text="Update", command=self.update_data)
+        self.update_button = tk.Button(self.left_frame, text="Update", command=self.UPDATE)
         self.update_button.pack(fill="x", padx=10, pady=5)
 
-        self.delete_button = tk.Button(self.left_frame, text="Delete", command=self.delete_data)
+        self.delete_button = tk.Button(self.left_frame, text="Delete", command=self.DELETE)
         self.delete_button.pack(fill="x", padx=10, pady=5)
 
         self.plot_button = tk.Button(self.left_frame, text="Vẽ Biểu đồ", command=self.open_plot_options)
@@ -43,18 +52,17 @@ class DataApp:
         self.back_button.pack(fill="x", padx=10, pady=5)
         self.back_button.pack_forget()
 
+        # Khung phải hiển thị dữ liệu
         self.top_frame = tk.Frame(self.right_frame)
         self.top_frame.pack(fill="both", expand=True)
 
         self.tree = ttk.Treeview(self.top_frame, columns=list(df.columns), show="headings")
-        
         for col in df.columns:
             self.tree.heading(col, text=col)
             self.tree.column(col, width=100)
 
         self.v_scrollbar = ttk.Scrollbar(self.top_frame, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.v_scrollbar.set)
-        
         self.tree.grid(row=0, column=0, sticky="nsew")
         self.v_scrollbar.grid(row=0, column=1, sticky="ns")
 
@@ -64,42 +72,63 @@ class DataApp:
         for _, row in df.iterrows():
             self.tree.insert("", "end", values=list(row))
 
-        self.bottom_frame = tk.Frame(self.right_frame)
-        self.bottom_frame.pack(fill="x", padx=10, pady=10)
-
-        self.entry_vars = {}
-        for i, col in enumerate(df.columns):
-            label = tk.Label(self.bottom_frame, text=col)
-            label.grid(row=0, column=i, padx=5, pady=5)
-            entry_var = tk.StringVar()
-            entry = tk.Entry(self.bottom_frame, textvariable=entry_var, width=15)
-            entry.grid(row=1, column=i, padx=5, pady=5)
-            self.entry_vars[col] = entry_var
-
         self.canvas = None
 
-    def create_data(self):
-        new_data = [self.entry_vars[col].get() for col in df.columns]
-        self.tree.insert("", "end", values=new_data)
+    def save_to_file(self):
+        df.to_csv("NewMales.csv", index=False)
+        print("Data saved to file.")
 
-    def read_data(self):
-        print("Read dữ liệu")
+    def update_tree(self):
+        # Xóa toàn bộ dữ liệu hiện tại trong Treeview
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        # Cập nhật lại danh sách cột nếu có thay đổi
+        self.tree["columns"] = list(df.columns)
+        for col in df.columns:
+            self.tree.heading(col, text=col)
+            self.tree.column(col, width=100)
+        # Thêm lại dữ liệu từ DataFrame
+        for _, row in df.iterrows():
+            self.tree.insert("", "end", values=list(row))
 
-    def update_data(self):
-        selected_item = self.tree.selection()
-        if selected_item:
-            updated_data = [self.entry_vars[col].get() for col in df.columns]
-            self.tree.item(selected_item, values=updated_data)
 
-    def delete_data(self):
-        selected_item = self.tree.selection()
-        if selected_item:
-            self.tree.delete(selected_item)
+    def CREATE(self):
+        create_window = tk.Toplevel(root)
+        create_window.title("Create Options")
+        create_window.geometry("300x300")
+        def handle_add_record():
+            new_row = create_row(df)
+            if new_row is not None:
+                self.save_to_file()
+                self.update_tree()
+        ttk.Button(create_window, text="Add a New Record", command=handle_add_record).pack(pady=10)
+        
+    def READ(self):
+        read_window = tk.Toplevel(root)
+        read_window.title("Read Options")
+        read_window.geometry("300x300")
+        ttk.Button(read_window, text="View Record Details", command=Record_Details).pack(pady=10)
+        ttk.Button(read_window, text="Pagination", command=Pagination).pack(pady=10)
+        ttk.Button(read_window, text="Search & Filter", command=Search_Filter).pack(pady=10)
+
+    def UPDATE(self):
+        update_window = tk.Toplevel(root)
+        update_window.title("Update Options")
+        update_window.geometry("300x300")
+        ttk.Button(update_window, text="Update a Record", command=lambda: [update_record(), self.save_to_file()]).pack(pady=10)
+        ttk.Button(update_window, text="Update Wage by Experience", command=lambda: [update_wage_by_exper(), self.save_to_file()]).pack(pady=10)
+        ttk.Button(update_window, text="Update Wage by School", command=lambda: [update_wage_by_school(), self.save_to_file()]).pack(pady=10)
+
+    def DELETE(self):
+        delete_window = tk.Toplevel(root)
+        delete_window.title("Delete Options")
+        delete_window.geometry("300x300")
+        ttk.Button(delete_window, text="Delete a row", command=lambda: [delete_row(), self.save_to_file()]).pack(pady=10)
+        ttk.Button(delete_window, text="Delete a column", command=lambda: [delete_column(), self.save_to_file()]).pack(pady=10)
 
     def open_plot_options(self):
         # Hiển thị các tùy chọn biểu đồ trên giao diện hiện tại
         self.top_frame.pack_forget()
-        self.bottom_frame.pack_forget()
         self.back_button.pack(fill="x", padx=10, pady=5)
 
         # Khung chứa nút tùy chọn biểu đồ
@@ -156,7 +185,6 @@ class DataApp:
             self.canvas = None
         
         self.top_frame.pack(fill="both", expand=True)
-        self.bottom_frame.pack(fill="x", padx=10, pady=10)
         self.back_button.pack_forget()
 
 root = tk.Tk()
