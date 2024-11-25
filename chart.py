@@ -6,8 +6,8 @@ df = pd.read_csv("NewMales.csv")
 
 def Wage_Edu(df, year=None, ax=None):
     """
-    Biểu đồ Wage vs Education: Giúp phân tích mối quan hệ giữa mức lương (Wage) 
-    và số năm học tập (Education) của người lao động.
+    Bieu do Wage vs Education: Giup phan tich moi quan he giua muc luong (Wage) 
+    va so nam hoc tap (Education) cua nguoi lao dong.
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(8, 6))
@@ -23,8 +23,8 @@ def Wage_Edu(df, year=None, ax=None):
 
 def Wage_Ind(df, year=None, ax=None):
     """
-    Biểu đồ Wage by Industry: Phân tích sự khác biệt về mức lương (Wage) 
-    giữa các ngành nghề (Industry) khác nhau.
+    Bieu do Wage by Industry: Phan tich su khac biet ve muc luong (Wage) 
+    giua cac nganh nghe (Industry) khac nhau.
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -41,7 +41,7 @@ def Wage_Ind(df, year=None, ax=None):
 
 def Wage(df, ax=None):
     """
-    Biểu đồ Wage Distribution: Phân tích phân phối mức lương (Wage) trong toàn bộ dữ liệu.
+    Bieu do Wage Distribution: Phan tich phan phoi muc luong (Wage) trong toan bo du lieu.
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(8, 6))
@@ -55,7 +55,7 @@ def Wage(df, ax=None):
 
 def plot_ethn(df, year=None, ax=None):
     """
-    Biểu đồ Ethnicity: Thống kê số lượng người lao động thuộc các nhóm sắc tộc (Ethnicity).
+    Bieu do Ethnicity: Thong ke so luong nguoi lao dong thuoc cac nhom sac toc (Ethnicity).
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -71,7 +71,7 @@ def plot_ethn(df, year=None, ax=None):
 
 def plot_maried(df, year=None, ax=None):
     """
-    Biểu đồ Marital Status: Thống kê số lượng người lao động theo tình trạng hôn nhân (Marital Status).
+    Bieu do Marital Status: Thong ke so luong nguoi lao dong theo tinh trang hon nhan (Marital Status).
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -87,7 +87,7 @@ def plot_maried(df, year=None, ax=None):
 
 def plot_health(df, year=None, ax=None):
     """
-    Biểu đồ Health Status: Thống kê số lượng người lao động theo tình trạng sức khỏe (Health Status).
+    Bieu do Health Status: Thong ke so luong nguoi lao dong theo tinh trang suc khoe (Health Status).
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -103,7 +103,7 @@ def plot_health(df, year=None, ax=None):
 
 def plot_industry(df, year=None, ax=None):
     """
-    Biểu đồ Industry: Thống kê số lượng người lao động theo các ngành nghề (Industry).
+    Bieu do Industry: Thong ke so luong nguoi lao dong theo cac nganh nghe (Industry).
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -119,7 +119,7 @@ def plot_industry(df, year=None, ax=None):
 
 def plot_occupation(df, year=None, ax=None):
     """
-    Biểu đồ Occupation: Thống kê số lượng người lao động theo các nghề nghiệp (Occupation).
+    Bieu do Occupation: Thong ke so luong nguoi lao dong theo cac nghe nghiep (Occupation).
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -135,7 +135,7 @@ def plot_occupation(df, year=None, ax=None):
 
 def plot_residence(df, year=None, ax=None):
     """
-    Biểu đồ Residence: Thống kê số lượng người lao động theo nơi cư trú (Residence).
+    Bieu do Residence: Thong ke so luong nguoi lao dong theo noi cu tru (Residence).
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -148,5 +148,3 @@ def plot_residence(df, year=None, ax=None):
     if ax is None:
         plt.tight_layout()
         plt.show()
-
-plot_residence(df)
