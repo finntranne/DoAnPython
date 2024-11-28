@@ -10,7 +10,7 @@ def create_row(df, callback):
     root = tk.Tk()
     root.title("Create a new record")
 
-    rowname = len(df) + 1
+    rowname = df['rownames'].max() + 1
 
     def save_record():
         """Luu ban ghi moi va cap nhat vao DataFrame."""
@@ -27,7 +27,11 @@ def create_row(df, callback):
             "wage": float(wage_entry.get()),
             "industry": str(industry_entry.get()),
             "occupation": str(occupation_entry.get()),
-            "residence": str(residence_var.get())
+            "residence": str(residence_var.get()),
+            "age": 6 +  int(exper_entry.get()) + int(school_entry.get()),
+            "exper level": pd.cut([int(exper_entry.get())], bins=[0, 3, 8, 12, 18], labels=['beginner', 'intermediate', 'advanced', 'expert'])[0],
+            "school level": pd.cut([int(school_entry.get())], bins=[0, 5, 9, 12, 16], labels=['very low', 'low', 'intermediate', 'high'])[0],
+            "wage level": pd.cut([float(wage_entry.get())], bins=[-float('inf'), -2, 0, 2, 3.5, float('inf')], labels=['very low', 'low', 'medium', 'high', 'very high'])[0]
         }
         global df
         df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
@@ -232,7 +236,7 @@ def filter_by_condition():
         if col not in df.columns:
             messagebox.showerror("Error", "The selected column does not exist in the dataset.")
             return
-        if col in ['rownames', 'nr', 'year', 'school', 'exper', 'wage']:
+        if col in ['rownames', 'nr', 'year', 'school', 'exper', 'wage', 'age']:
             try:
                 choice = comp_type_var.get()
                 val = float(value_entry.get())
@@ -255,8 +259,15 @@ def filter_by_condition():
                 messagebox.showerror("Error", "Please enter a valid numeric value.")
                 return
         else:
-            cond = value_entry.get()
-            result = df[df[col] == cond]
+            if comp_type_var.get() in ["greater than", "greater than or equal to", "less than", "less than or equal to"]:
+                messagebox.showerror("Error", "Invalid comparison type")
+                return
+            else:
+                choice = value_entry.get()
+                if choice == "equal to":
+                    result = df[df[col] == val]
+                elif choice == "different from":
+                    result = df[df[col] != val]
         display_dataframe(result, "Filtered by Condition")
 
     frame = root("Filter by condition")
@@ -392,8 +403,22 @@ def update_record(tree, df):
             try:
                 updated_row = {
                     "rownames": record['rownames'],
-                    "nr": int(nr_entry.get()) if nr_entry.get().isdigit() else record["nr"],
-                    # Tiep tuc lay du lieu cho cac cot khac...
+                    "nr": int(nr_entry.get()) if nr_entry.get() else record["nr"],
+                    "year": int(year_entry.get()) if year_entry.get() else record["year"],
+                    "school": int(school_entry.get()) if school_entry.get() else record["school"],
+                    "exper": int(exper_entry.get()) if exper_entry.get() else record["exper"],
+                    "union": union_var.get() if union_var.get() else record["union"],
+                    "ethn": ethn_var.get() if ethn_var.get() else record["ethn"],
+                    "maried": maried_var.get() if maried_var.get() else record["maried"],
+                    "health": health_var.get() if health_var.get() else record["health"],
+                    "wage": float(wage_entry.get()) if wage_entry.get() else record["wage"],
+                    "industry": industry_entry.get() if industry_entry.get() else record["industry"],
+                    "occupation": occupation_entry.get() if occupation_entry.get() else record["occupation"],
+                    "residence": residence_entry.get() if residence_entry.get() else record["residence"],
+                    "age": 6 +  int(exper_entry.get()) + int(school_entry.get()),
+                    "exper level": pd.cut([int(exper_entry.get())], bins=[0, 3, 8, 12, 18], labels=['beginner', 'intermediate', 'advanced', 'expert'])[0],
+                    "school level": pd.cut([int(school_entry.get())], bins=[0, 5, 9, 12, 16], labels=['very low', 'low', 'intermediate', 'high'])[0],
+                    "wage level": pd.cut([float(wage_entry.get())], bins=[-float('inf'), -2, 0, 2, 3.5, float('inf')], labels=['very low', 'low', 'medium', 'high', 'very high'])[0]
                 }
                 for col, value in updated_row.items():
                     df.loc[df['rownames'] == record['rownames'], col] = value
@@ -410,8 +435,8 @@ def update_record(tree, df):
         nr_entry.grid(row=0, column=1, sticky=tk.EW, padx=10, pady=5)
 
         ttk.Label(edit_window, text="year:").grid(row=1, column=0, sticky=tk.W, padx=10, pady=5)
-        year_var = tk.StringVar(value=str(record["year"]))
-        year_entry = ttk.Combobox(edit_window, textvariable=year_var, values=[1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987])
+        year_entry = ttk.Entry(edit_window)
+        year_entry.insert(0, record["year"])
         year_entry.grid(row=1, column=1, sticky=tk.EW, padx=10, pady=5)
 
         ttk.Label(edit_window, text="school:").grid(row=2, column=0, sticky=tk.W, padx=10, pady=5)
@@ -492,8 +517,10 @@ def update_wage_by_exper(tree, df):
                 "expert": expert_raise,
             }
             df["wage"] = df.apply(
-                lambda row: row["wage"] * (1 + raise_map.get(row["exper level"], 0)), axis=1
+                lambda row: row["wage"] + math.log(1 + raise_map.get(row["exper level"], 0)), axis=1
             )
+            df['wage level'] = pd.cut(df['wage'], bins=[-float('inf'), -2, 0, 2, 3.5, float('inf')], labels=['very low', 'low', 'medium', 'high', 'very high'], right=True)
+
             df.to_csv("NewMales.csv", index=False)
             update_tree(tree, df)
             messagebox.showinfo("Success", "Wage updated successfully.")
@@ -537,8 +564,11 @@ def update_wage_by_school(tree, df):
                 "high": high_raise,
             }
             df["wage"] = df.apply(
-                lambda row: row["wage"] * (1 + raise_map.get(row["school level"], 0)), axis=1
+                lambda row: row["wage"] + math.log(1 + raise_map.get(row["school level"], 0)), axis=1
             )
+
+            df['wage level'] = pd.cut(df['wage'], bins=[-float('inf'), -2, 0, 2, 3.5, float('inf')], labels=['very low', 'low', 'medium', 'high', 'very high'], right=True)
+
             for item in tree.get_children():
                 tree.delete(item)
             for _, row in df.iterrows():
@@ -569,6 +599,8 @@ def update_wage_by_school(tree, df):
     apply_button = ttk.Button(root, text="Apply", command=apply)
     apply_button.grid(row=4, column=0, columnspan=2, pady=10)
     root.mainloop()
+
+#DELETE
 
 def delete_row(df, column_name, unique_value):
     """Xoa mot hang trong DataFrame dua tren gia tri duy nhat cua mot cot cu the."""
