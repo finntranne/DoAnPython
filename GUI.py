@@ -45,7 +45,7 @@ class DataApp:
         self.right_frame = tk.Frame(root)
         self.right_frame.pack(side="right", fill="both", expand=True)
 
-        tk.Label(self.left_frame, text="Chuc nang", font=("Arial", 20, "bold"), bg="#55B3D9").pack(pady=10)
+        tk.Label(self.left_frame, text="Chức năng", font=("Arial", 20, "bold"), bg="#55B3D9").pack(pady=10)
 
         self.create_button = tk.Button(self.left_frame, text="Create", command=self.CREATE)
         self.create_button.pack(fill="x", padx=10, pady=5)
@@ -59,7 +59,7 @@ class DataApp:
         self.delete_button = tk.Button(self.left_frame, text="Delete", command=self.DELETE)
         self.delete_button.pack(fill="x", padx=10, pady=5)
 
-        self.plot_button = tk.Button(self.left_frame, text="Ve Bieu do", command=self.open_plot_options)
+        self.plot_button = tk.Button(self.left_frame, text="Vẽ Biểu đồ", command=self.open_plot_options)
         self.plot_button.pack(fill="x", padx=10, pady=5)
 
         self.back_button = tk.Button(self.left_frame, text="Back", command=self.show_data)
@@ -76,9 +76,11 @@ class DataApp:
 
         self.v_scrollbar = ttk.Scrollbar(self.top_frame, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.v_scrollbar.set)
+        self.h_scrollbar = ttk.Scrollbar(self.top_frame, orient="horizontal", command=self.tree.xview)
+        self.tree.configure(xscrollcommand=self.h_scrollbar.set)
         self.tree.grid(row=0, column=0, sticky="nsew")
         self.v_scrollbar.grid(row=0, column=1, sticky="ns")
-
+        self.h_scrollbar.grid(row=1, column=0, sticky="ew")
         self.top_frame.grid_rowconfigure(0, weight=1)
         self.top_frame.grid_columnconfigure(0, weight=1)
 
