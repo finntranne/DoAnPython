@@ -1,9 +1,18 @@
-<h1>ĐỒ ÁN PHÂN TÍCH DỮ LIỆU TRONG PYTHON</h1>
-<h2>Thành viên và phân công nhiệm vụ</h2>
-  <l1>* Trần Hữu Thoại, MSSV: 23110334: Tìm hiểu Tkinter, code giao diện tương tác</l1>
-  * Đoàn Quân Tuấn, MSSV: 23110354: Code thao tác READ và UPDATE dữ liệu
-  * Nguyễn Hoàng Anh Kiệt, MSSV: 23110247: Code thao tác CREATE và DELETE dữ liệu
-  * Nguyễn Trung Hậu, MSSV: 23110212: Mô tả dữ liệu, làm sạch và chuẩn hóa dữ liệu
-  * Trần Thành Trung, MSSV: 23110351: Trực quan hóa dữ liệu bằng biểu đồ
+# ĐỒ ÁN PHÂN TÍCH DỮ LIỆU TRONG PYTHON
 
+## Mô tả dự án
+Đồ án này được thực hiện nhằm phân tích dữ liệu với ngôn ngữ Python, bao gồm các chức năng: tạo giao diện tương tác, thực hiện các thao tác CRUD (Create, Read, Update, Delete), xử lý và chuẩn hóa dữ liệu, cùng với việc trực quan hóa thông tin thông qua biểu đồ.
 
+## Thành viên và phân công nhiệm vụ
+- **Trần Hữu Thoại** (MSSV: 23110334): Tìm hiểu và xây dựng giao diện tương tác sử dụng **Tkinter**.
+- **Đoàn Quân Tuấn** (MSSV: 23110354): Thực hiện chức năng **READ** và **UPDATE** dữ liệu.
+- **Nguyễn Hoàng Anh Kiệt** (MSSV: 23110247): Thực hiện chức năng **CREATE** và **DELETE** dữ liệu.
+- **Nguyễn Trung Hậu** (MSSV: 23110212): Phân tích, làm sạch và chuẩn hóa dữ liệu.
+- **Trần Thành Trung** (MSSV: 23110351): Trực quan hóa dữ liệu thông qua biểu đồ và biểu diễn đồ họa.
+
+## Các công nghệ sử dụng
+- **Ngôn ngữ lập trình**: Python
+- **Thư viện chính**:
+  - Tkinter (Xây dựng giao diện)
+  - Pandas (Xử lý và phân tích dữ liệu)
+  - Matplotlib, Seaborn (Trực quan hóa dữ liệu)
