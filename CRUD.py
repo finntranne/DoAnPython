@@ -14,6 +14,12 @@ def create_row(df, callback):
 
     def save_record():
         """Luu ban ghi moi va cap nhat vao DataFrame."""
+        year_list = [1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987]
+        yesno_list = ["yes", "no"]
+        ethn_list = ["black", "hisp", "other"]
+        if int(year_entry.get()) not in year_list or union_var.get() not in yesno_list or ethn_var.get() not in ethn_list or maried_var.get() not in yesno_list or health_var.get() not in yesno_list:
+            messagebox.showerror("Error", "Invalid values")
+            return
         new_row = {
             "rownames": rowname,
             "nr": int(nr_entry.get()),
