@@ -139,20 +139,24 @@ class DataApp:
 
     def DELETE(self):
         """
-        Xoa ban ghi duoc chon tu Treeview va DataFrame.
+        Xoa cac ban ghi duoc chon tu Treeview và DataFrame.
         """
         global df
-        selected_item = self.tree.selection()
-        if selected_item:
+        selected_items = self.tree.selection()
+        if not selected_items:
+            messagebox.showerror("Error", "Vui long chon cot")
+            return
+        for selected_item in selected_items:
             item_values = self.tree.item(selected_item, "values")
             if not item_values:
-                print("NULL")
-                return
+                continue
             unique_value = item_values[0]
             column_name = df.columns[0]
             df = delete_row(df, column_name, unique_value)
             self.tree.delete(selected_item)
-            self.save_to_file()
+
+        self.save_to_file()  # Lưu lại DataFrame sau khi xóa
+
 
     def open_plot_options(self):
         """
@@ -162,18 +166,18 @@ class DataApp:
         self.back_button.pack(fill="x", padx=10, pady=5)
         self.plot_options_frame = tk.Frame(self.right_frame)
         self.plot_options_frame.pack(fill="both", expand=True)
-        tk.Label(self.plot_options_frame, text="CHON LOAI BIEU DO", font=("Arial", 36)).grid(row=0, column=0, columnspan=3, pady=10)
+        tk.Label(self.plot_options_frame, text="CHỌN LOẠI BIỂU ĐỒ", font=("Arial", 36)).grid(row=0, column=0, columnspan=3, pady=10)
 
         buttons = [
-            ("Bieu do Wage_Edu", lambda: self.plot_custom(Wage_Edu, df)),
-            ("Bieu do Wage_Ind", lambda: self.plot_custom(Wage_Ind, df)),
-            ("Bieu do Wage", lambda: self.plot_custom(Wage, df)),
-            ("Bieu do Ethnicity", lambda: self.plot_custom(plot_ethn, df)),
-            ("Bieu do Marital Status", lambda: self.plot_custom(plot_maried, df)),
-            ("Bieu do Health", lambda: self.plot_custom(plot_health, df)),
-            ("Bieu do Industry", lambda: self.plot_custom(plot_industry, df)),
-            ("Bieu do Occupation", lambda: self.plot_custom(plot_occupation, df)),
-            ("Bieu do Residence", lambda: self.plot_custom(plot_residence, df))
+            ("Biểu đồ Wage_Edu", lambda: self.plot_custom(Wage_Edu, df)),
+            ("Biểu đồ Wage_Ind", lambda: self.plot_custom(Wage_Ind, df)),
+            ("Biểu đồ Wage", lambda: self.plot_custom(Wage, df)),
+            ("Biểu đồ Ethnicity", lambda: self.plot_custom(plot_ethn, df)),
+            ("Biểu đồ Marital Status", lambda: self.plot_custom(plot_maried, df)),
+            ("Biểu đồ Health", lambda: self.plot_custom(plot_health, df)),
+            ("Biểu đồ Industry", lambda: self.plot_custom(plot_industry, df)),
+            ("Biểu đồ Occupation", lambda: self.plot_custom(plot_occupation, df)),
+            ("Biểu đồ Residence", lambda: self.plot_custom(plot_residence, df))
         ]
 
         for i, (text, command) in enumerate(buttons):
