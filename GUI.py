@@ -144,7 +144,7 @@ class DataApp:
         global df
         selected_items = self.tree.selection()
         if not selected_items:
-            messagebox.showerror("Error", "Vui long chon cot")
+            messagebox.showerror("Error", "Vui long chon hang")
             return
         for selected_item in selected_items:
             item_values = self.tree.item(selected_item, "values")
