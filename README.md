@@ -7,7 +7,7 @@
 - **Trần Hữu Thoại** (MSSV: 23110334): Tìm hiểu và xây dựng giao diện tương tác sử dụng **Tkinter**.
 - **Đoàn Quân Tuấn** (MSSV: 23110354): Thực hiện chức năng **READ** và **UPDATE** dữ liệu.
 - **Nguyễn Hoàng Anh Kiệt** (MSSV: 23110247): Thực hiện chức năng **CREATE** và **DELETE** dữ liệu.
-- **Nguyễn Trung Hậu** (MSSV: 23110212): Phân tích, làm sạch và chuẩn hóa dữ liệu.
+- **Nguyễn Trung Hậu** (MSSV: 23110212): Phân tích, làm sạch, chuẩn hóa dữ liệu và xuất file PDF.
 - **Trần Thành Trung** (MSSV: 23110351): Trực quan hóa dữ liệu thông qua biểu đồ và biểu diễn đồ họa.
 
 ## Các công nghệ sử dụng
