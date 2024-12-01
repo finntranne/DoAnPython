@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+
 df = pd.read_csv("NewMales.csv")
 
 def Wage_Edu(df, year=None, ax=None):
@@ -39,13 +40,14 @@ def Wage_Ind(df, year=None, ax=None):
     if ax is None:
         plt.show()
 
-def Wage(df, ax=None):
+def Wage(df, year = None ,ax=None):
     """
     Bieu do Wage Distribution: Phan tich phan phoi muc luong (Wage) trong toan bo du lieu.
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(8, 6))
-
+    if year is not None:
+        df = df[df['year'] == year]
     sns.histplot(df['wage'], kde=True, bins=30, ax=ax)
     ax.set_title('Distribution of Wage')
     ax.set_xlabel('Wage')
