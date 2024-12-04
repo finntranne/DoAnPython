@@ -295,10 +295,10 @@ def filter_by_condition():
         if col not in df.columns:
             messagebox.showerror("Error", "The selected column does not exist in the dataset.")
             return
+        choice = comp_type_var.get()
+        val = value_entry.get()
         if col in ['rownames', 'nr', 'year', 'school', 'exper', 'wage', 'age']:
             try:
-                choice = comp_type_var.get()
-                val = value_entry.get()
                 if not validate_input(val, float, non_negative=True, field_name="Value"):
                     return
                 if choice == "greater than":
@@ -320,11 +320,10 @@ def filter_by_condition():
                 messagebox.showerror("Error", "Please enter a valid numeric value.")
                 return
         else:
-            if comp_type_var.get() in ["greater than", "greater than or equal to", "less than", "less than or equal to"]:
+            if choice in ["greater than", "greater than or equal to", "less than", "less than or equal to"]:
                 messagebox.showerror("Error", "Invalid comparison type")
                 return
             else:
-                choice = value_entry.get()
                 if choice == "equal to":
                     result = df[df[col] == val]
                 elif choice == "different from":
